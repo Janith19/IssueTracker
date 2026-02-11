@@ -90,3 +90,17 @@ export const logout = (req: Request, res: Response) => {
   });
   res.json({ message: "Logged out" });
 };
+
+export const checkAuth = (req: Request, res: Response) => {
+  const token = req.cookies["jwt"];
+  if (!token) {
+    return res.status(401).json({ isAuthenticated: false });
+  }
+
+  try {
+    jwt.verify(token, process.env.JWT_SECRET!);
+    res.json({ isAuthenticated: true });
+  } catch (err) {
+    res.status(401).json({ isAuthenticated: false });
+  }
+};
