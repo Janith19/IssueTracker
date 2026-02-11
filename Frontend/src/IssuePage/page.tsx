@@ -217,7 +217,7 @@ export default function IssuePage() {
     toast.success("Exported as CSV");
   };
 
-  const totalIssues = Object.values(statusCounts).reduce(
+  const totalIssues = Object.values(statusCounts || {}).reduce(
     (sum, count) => sum + count,
     0,
   );
@@ -299,7 +299,7 @@ export default function IssuePage() {
               >
                 <p className={`text-sm ${style.label}`}>{status}</p>
                 <p className="text-2xl font-bold text-white">
-                  {statusCounts[status] || 0}
+                  {statusCounts?.[status] || 0}
                 </p>
               </button>
             );
