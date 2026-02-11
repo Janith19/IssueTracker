@@ -29,12 +29,13 @@ export const getIssues = async (req: Request, res: Response) => {
 
   const query: any = { createdBy: req.user?.userId };
 
-  if (title) query.title = { $regex: title, $options: "i" };
-  if (priority) query.priority = priority;
-  if (status) query.status = status;
+  if (title) query.title = { $regex: String(title), $options: "i" };
+  if (priority) query.priority = String(priority);
+  if (status) query.status = String(status);
 
   try {
     const issues = await Issue.find(query)
+      .sort({ createdAt: -1 })
       .limit(Number(limit))
       .skip((Number(page) - 1) * Number(limit));
 
@@ -59,6 +60,7 @@ export const getIssues = async (req: Request, res: Response) => {
       statusCounts,
     });
   } catch (err) {
+    console.error("Error in getIssues:", err);
     res.status(500).json({ message: "Server Error" });
   }
 };
@@ -73,6 +75,7 @@ export const getIssue = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "Issue Id Not found" });
     res.json(issue);
   } catch (err) {
+    console.error("Error in getIssue:", err);
     res.status(500).json({ message: "Server error", err });
   }
 };
@@ -89,7 +92,8 @@ export const updateIssue = async (req: Request, res: Response) => {
     );
     if (!issue) return res.status(404).json({ message: "Not found" });
     res.json(issue);
-  } catch {
+  } catch (err) {
+    console.error("Error in updateIssue:", err);
     res.status(500).json({ message: "Server error" });
   }
 };
@@ -105,7 +109,8 @@ export const deleteIssue = async (req: Request, res: Response) => {
     });
     if (!issue) return res.status(404).json({ message: "Not found" });
     res.json({ message: "Deleted" });
-  } catch {
+  } catch (err) {
+    console.error("Error in deleteIssue:", err);
     res.status(500).json({ message: "Server error" });
   }
 };
