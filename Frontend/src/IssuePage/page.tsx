@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useIssueStore } from "../store/issuesStore";
 import { useAuthStore } from "../store/authStore";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import type { Issue } from "../types/index";
 
@@ -29,6 +29,7 @@ const priorityColors: Record<string, string> = {
 };
 
 export default function IssuePage() {
+  const navigate = useNavigate();
   const {
     issues,
     statusCounts,
@@ -173,7 +174,7 @@ export default function IssuePage() {
 
   const handleLogout = async () => {
     await logout();
-    window.location.href = "/login";
+    navigate("/login");
   };
 
   const exportToJSON = () => {
