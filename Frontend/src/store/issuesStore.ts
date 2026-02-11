@@ -35,8 +35,8 @@ export const useIssueStore = create<IssuesState>((set, get) => ({
     try {
       const { data } = await api.get("/issues", { params: filters });
       set({
-        issues: data.issues,
-        statusCounts: data.statusCounts,
+        issues: data.issues || [],
+        statusCounts: data.statusCounts || {},
         totalPages: data.totalPages || 1,
         currentPage: filters.page || 1,
         loading: false,

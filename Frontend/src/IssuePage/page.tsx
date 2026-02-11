@@ -358,7 +358,7 @@ export default function IssuePage() {
           <div className="text-center py-20">
             <p className="text-slate-400 text-lg">Loading issues...</p>
           </div>
-        ) : issues.length === 0 ? (
+        ) : (issues || []).length === 0 ? (
           <div className="text-center py-20">
             <p className="text-slate-400 text-lg">No issues found</p>
             <p className="text-slate-500 text-sm mt-1">
