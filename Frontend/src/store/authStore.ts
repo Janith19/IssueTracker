@@ -64,9 +64,13 @@ export const useAuthStore = create<AuthState>((set) => ({
       set({ loading: false, error: null });
       toast.success("Account created! Please sign in.");
       return true;
-    } catch {
-      set({ loading: false, error: "Registration failed" });
-      toast.error("Registration failed. Email may already be in use.");
+    } catch (err: any) {
+      const msg =
+        err.response?.data?.message ||
+        err.response?.data?.errors?.[0]?.msg ||
+        "Registration failed";
+      set({ loading: false, error: msg });
+      toast.error(msg);
       return false;
     }
   },
