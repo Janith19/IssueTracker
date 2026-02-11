@@ -46,8 +46,12 @@ export const useAuthStore = create<AuthState>((set) => ({
   checkAuth: async () => {
     set({ loading: true });
     try {
-      await api.get("/issues");
-      set({ isAuthenticated: true, initialized: true, loading: false });
+      const { data } = await api.get("/auth/check");
+      if (data.isAuthenticated) {
+        set({ isAuthenticated: true, initialized: true, loading: false });
+      } else {
+        throw new Error("Not authenticated");
+      }
     } catch {
       set({ isAuthenticated: false, initialized: true, loading: false });
     }
